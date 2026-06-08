@@ -59,12 +59,9 @@
         <label>Amount (₹)</label>
         <input type="number" id="amt" placeholder="0.00" min="0" step="0.01"/>
       </div>
-      <div class="field">
+      <div class="field" id="catField" style="display: none;">
         <label>Category</label>
         <select id="cat">
-          <option value="💼 Salary">💼 Salary</option>
-          <option value="💻 Freelance">💻 Freelance</option>
-          <option value="🎁 Gift">🎁 Gift</option>
           <option value="🍔 Food">🍔 Food</option>
           <option value="🚗 Transport">🚗 Transport</option>
           <option value="🏠 Rent">🏠 Rent</option>
@@ -96,7 +93,7 @@
         <div id="clearConfirm" style="display:none; margin-top:6px; background:rgba(248,113,113,0.08); border:1px solid rgba(248,113,113,0.25); border-radius:10px; padding:10px 14px; font-size:0.82rem;">
           Are you sure? This cannot be undone.
           <div style="display:flex; gap:8px; margin-top:8px;">
-            <button onclick="clearAll()" style="flex:1; padding:5px; background:var(--expense); color:#fff; border:none; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.82rem; cursor:pointer;">Delete All</button>
+            <button onclick="clearAll()" style="flex:1; padding:5px; background:var(--expense); color:#fff; border:none; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.82rem; cursor:pointer;">Yes, Clear</button>
             <button onclick="hideConfirm()" style="flex:1; padding:5px; background:var(--surface2); color:var(--muted); border:1px solid var(--border); border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.82rem; cursor:pointer;">Cancel</button>
           </div>
         </div>

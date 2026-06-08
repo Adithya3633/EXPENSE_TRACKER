@@ -1,16 +1,16 @@
-// ─── STATE ───────────────────────────────────────────────────────────────────
+// ─── STATE ───────────────────────────────────────────────────────────────
 // Load from localStorage, or start with empty array
 let transactions = JSON.parse(localStorage.getItem('et_transactions') || '[]');
 let currentType = 'income';
 let currentFilter = 'all';
 
-// ─── SAVE ─────────────────────────────────────────────────────────────────────
+// ─── SAVE ───────────────────────────────────────────────────────────────
 // Called after every change — persists to localStorage
 function save() {
   localStorage.setItem('et_transactions', JSON.stringify(transactions));
 }
 
-// ─── FORMAT ───────────────────────────────────────────────────────────────────
+// ─── FORMAT ──────────────────────────────────────────────────────────────
 function fmt(n) {
   return '₹' + Math.abs(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
@@ -21,18 +21,26 @@ function fmtDate(iso) {
          ' · ' + d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 }
 
-// ─── TYPE TOGGLE ──────────────────────────────────────────────────────────────
+// ─── TYPE TOGGLE ─────────────────────────────────────────────────────────
 function setType(type) {
   currentType = type;
   document.getElementById('btnIncome').className  = 'type-btn' + (type === 'income'  ? ' active-income'  : '');
   document.getElementById('btnExpense').className = 'type-btn' + (type === 'expense' ? ' active-expense' : '');
+  
+  // Show category dropdown only for expenses
+  const catField = document.getElementById('catField');
+  if (type === 'expense') {
+    catField.style.display = 'block';
+  } else {
+    catField.style.display = 'none';
+  }
 }
 
-// ─── ADD TRANSACTION ──────────────────────────────────────────────────────────
+// ─── ADD TRANSACTION ───────────────────────────────────────────────────────
 function addTransaction() {
   const desc = document.getElementById('desc').value.trim();
   const amt  = parseFloat(document.getElementById('amt').value);
-  const cat  = document.getElementById('cat').value;
+  const cat  = currentType === 'expense' ? document.getElementById('cat').value : '💰 Income';
 
   if (!desc)       return shake('desc');
   if (!amt || amt <= 0) return shake('amt');
@@ -56,7 +64,7 @@ function addTransaction() {
   document.getElementById('amt').value  = '';
 }
 
-// ─── DELETE TRANSACTION ───────────────────────────────────────────────────────
+// ─── DELETE TRANSACTION ──────────────────────────────────────────────────────
 function deleteTransaction(id) {
   // filter() returns new array without the deleted item
   transactions = transactions.filter(tx => tx.id !== id);
@@ -72,7 +80,7 @@ function hideConfirm() {
   document.getElementById('clearConfirm').style.display = 'none';
 }
 
-// ─── CLEAR ALL ────────────────────────────────────────────────────────────────
+// ─── CLEAR ALL ─────────────────────────────────────────────────────────────
 function clearAll() {
   transactions = [];
   save();
@@ -80,7 +88,7 @@ function clearAll() {
   render();
 }
 
-// ─── FILTER ───────────────────────────────────────────────────────────────────
+// ─── FILTER ──────────────────────────────────────────────────────────────
 function setFilter(filter, btn) {
   currentFilter = filter;
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -88,7 +96,7 @@ function setFilter(filter, btn) {
   render();
 }
 
-// ─── COMPUTE TOTALS ───────────────────────────────────────────────────────────
+// ─── COMPUTE TOTALS ────────────────────────────────────────────────────────
 function getTotals() {
   return transactions.reduce((acc, tx) => {
     if (tx.amount > 0) acc.income  += tx.amount;
@@ -97,7 +105,7 @@ function getTotals() {
   }, { income: 0, expense: 0 });
 }
 
-// ─── RENDER ───────────────────────────────────────────────────────────────────
+// ─── RENDER ──────────────────────────────────────────────────────────────
 function render() {
   // 1. Update summary cards
   const { income, expense } = getTotals();

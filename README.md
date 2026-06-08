@@ -60,7 +60,7 @@ A modern, lightweight web application to track your income and expenses with aut
 
 ## 🚀 Demo
 
-[Live Demo](https://adithya3633.github.io/EXPENSE_TRACKER/) *(if deployed)*
+[Live Demo](https://adithya3633.github.io/EXPENSE_TRACKER/) 
 
 ## 📦 Installation
 
